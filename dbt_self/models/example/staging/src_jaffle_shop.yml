@@ -1,0 +1,31 @@
+version: 2
+
+sources:
+  - name: jaffle_shop
+    # schema: public
+    schema: dbt_self
+    tables:
+      - name: raw_customers
+        columns:
+         - name: id
+           tests:
+           - unique
+           - not_null
+      
+      - name: raw_orders
+        columns:
+         - name: id
+           tests:
+           - unique
+           - not_null
+        loaded_at_field: _etl_loaded_at
+        freshness:
+              warn_after: {count: 1, period: minute}
+              error_after: {count: 2, period: minute}
+  
+
+  # - name: stripe
+  #   database: raw
+  #   schema: stripe
+  #   tables:
+  #     - name: payments
